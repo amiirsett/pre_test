@@ -1,47 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>CSV Table Display</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CSV Table Viewer</title>
   <style>
     body {
-      background-color: #121212;
-      color: #ffffff;
-      font-family: Arial, sans-serif;
-      padding: 30px;
+      background-color: #0f0f0f;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 40px 20px;
+      text-align: center;
     }
-    h2 {
-      color: #00ffcc;
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 30px;
+      color: #ffffff;
+    }
+    input[type="file"] {
+      padding: 8px 12px;
+      background-color: #222;
+      border: 1px solid #444;
+      color: #ccc;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-bottom: 40px;
     }
     table {
       border-collapse: collapse;
-      width: 300px;
-      margin-bottom: 30px;
+      margin: 20px auto;
+      width: 320px;
+      max-width: 90%;
     }
     th, td {
-      border: 1px solid #888;
-      padding: 8px 12px;
+      border: 1px solid #444;
+      padding: 10px;
       text-align: center;
     }
     th {
-      background-color: #333;
+      background-color: #1a1a1a;
+      color: #fff;
     }
-    input[type="file"] {
-      margin-bottom: 20px;
+    td {
+      background-color: #181818;
     }
   </style>
 </head>
 <body>
 
-  <h2>Select and Display Table 1 (CSV)</h2>
+  <h1>CSV Table Viewer</h1>
+
   <input type="file" id="csvFileInput" accept=".csv" />
 
   <h2>Table 1</h2>
-  <table id="table1">
-    <!-- Table content will be inserted here -->
-  </table>
+  <table id="table1"></table>
 
-  <h2>Table 2 (Computed Values)</h2>
+  <h2>Table 2</h2>
   <table id="table2">
     <tr><th>Category</th><th>Value</th></tr>
     <tr><td>Alpha</td><td id="alpha"></td></tr>
@@ -59,31 +73,31 @@
         const text = e.target.result;
         const rows = text.trim().split('\n').map(row => row.split(','));
 
-        const table = document.getElementById('table1');
-        table.innerHTML = ''; // Clear existing table
-        rows.forEach((row, rowIndex) => {
+        // Render Table 1
+        const table1 = document.getElementById('table1');
+        table1.innerHTML = '';
+        rows.forEach((row, i) => {
           const tr = document.createElement('tr');
           row.forEach(cell => {
-            const cellTag = rowIndex === 0 ? 'th' : 'td';
-            const td = document.createElement(cellTag);
+            const tag = i === 0 ? 'th' : 'td';
+            const td = document.createElement(tag);
             td.textContent = cell;
             tr.appendChild(td);
           });
-          table.appendChild(tr);
+          table1.appendChild(tr);
         });
 
-        // Extract only the values from the second column
+        // Extract column A values
         const values = rows.slice(1).map(row => parseFloat(row[1]));
 
-        // Compute required values
-        const A5 = values[4];   // Row 5 → index 4
+        const A5 = values[4];
         const A7 = values[6];
         const A12 = values[11];
         const A13 = values[12];
         const A15 = values[14];
         const A20 = values[19];
 
-        // Display Table 2
+        // Table 2 calculations
         document.getElementById('alpha').textContent = A5 + A20;
         document.getElementById('beta').textContent = (A15 / A7).toFixed(2);
         document.getElementById('charlie').textContent = A13 * A12;
